@@ -77,6 +77,19 @@ async def notify_waitlist(email: str):
 
 
 # --- User-facing emails ---
+async def notify_venue_status_update(to_email: str, poc_name: str, new_status: str, community_id: int):
+    # Make the subject line a bit more friendly based on the status
+    subject_status = "Approved! 🎉" if new_status == "approved" else "Update"
+    
+    await send_email(
+        to=to_email,
+        subject=f"Questin — {subject_status} on your Venue Request",
+        html=f"""
+        <h2>Hi {poc_name},</h2>
+        <p>Your venue request for Community #{community_id} has been marked as <b>{new_status}</b>.</p>
+        <p>If you have any questions or need further details, simply reply to this email.</p>
+        """
+    )
 
 async def send_access_approved(to_email: str, name: str, token: str):
     access_link = f"{settings.FRONTEND_URL}?token={token}"

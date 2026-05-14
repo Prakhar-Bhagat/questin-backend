@@ -1,4 +1,4 @@
-from sqlalchemy import String, Integer, DateTime, ForeignKey, func
+from sqlalchemy import String, Integer, DateTime, ForeignKey, func, Column
 from sqlalchemy.orm import Mapped, mapped_column
 from app.database import Base
 
@@ -9,6 +9,7 @@ class VenueRequest(Base):
     community_id: Mapped[int] = mapped_column(Integer, ForeignKey("communities.id"))
     poc_name: Mapped[str] = mapped_column(String(100))
     phone: Mapped[str] = mapped_column(String(20))
+    email = Column(String, nullable=False)
     preferred_dates: Mapped[str] = mapped_column(String(200))
     capacity: Mapped[str] = mapped_column(String(50))
     revenue_model: Mapped[str] = mapped_column(String(50))

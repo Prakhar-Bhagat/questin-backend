@@ -24,6 +24,7 @@ class VenueRequestOut(BaseModel):
     id: int
     community_id: int
     poc_name: str
+    email: str
     phone: str
     preferred_dates: str
     capacity: str
