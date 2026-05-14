@@ -15,15 +15,15 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
 origins = [
-    "http://localhost:5173", # Keep your local dev environment working
-    "https://questin-alpha.vercel.app", # <-- ADD THIS LINE
+    "http://localhost:5173",
+    "https://questin-alpha.vercel.app",
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows ALL domains temporarily
-    allow_credentials=False, # Must be False if origins is "*"
-    allow_methods=["*"],
+    allow_origins=origins,          
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["*"],
 )
 
