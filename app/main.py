@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import communities
 from app.routers import communities, access, requests, pitches, waitlist
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
