@@ -35,3 +35,4 @@ async def submit_venue_request(
 @router.get("/", response_model=list[VenueRequestOut], dependencies=[Depends(require_admin)])
 async def list_venue_requests(db: AsyncSession = Depends(get_db)):
     return await svc.list_venue_requests(db)
+# force redeploy
