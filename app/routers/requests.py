@@ -22,7 +22,7 @@ async def submit_venue_request(
     db: AsyncSession = Depends(get_db),
     email: str = Depends(require_catalogue_access)  # must be an approved user
 ):
-    return await svc.create_venue_request(data, db)
+    return await svc.create_venue_request(data,email, db)
 
 @router.post("/", response_model=VenueRequestOut, status_code=201)
 async def submit_venue_request(
