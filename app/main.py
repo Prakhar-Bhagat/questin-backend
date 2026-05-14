@@ -21,8 +21,8 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000","https://questin-alpha.vercel.app"],
-    allow_credentials=True,
+    allow_origins=["*"],  # Allows ALL domains temporarily
+    allow_credentials=False, # Must be False if origins is "*"
     allow_methods=["*"],
     allow_headers=["*"],
 )
