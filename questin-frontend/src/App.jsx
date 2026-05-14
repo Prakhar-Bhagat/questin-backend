@@ -118,6 +118,11 @@ export default function Questin() {
 
   const handleGateSubmit = async () => {
     if (!gateForm.name || !gateForm.email || !gateForm.about) return;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(gateForm.email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -134,9 +139,12 @@ export default function Questin() {
       if (res.ok) {
         setGateSubmitted(true);
       } else {
-        const data = await res.json();
-        setError(data.detail || "Submission failed. Try again.");
-      }
+          const data = await res.json();
+          const msg = Array.isArray(data.detail) 
+            ? "Please check your inputs." 
+            : data.detail || "Submission failed. Try again.";
+          setError(msg);
+        }
     } catch (e) {
       setError("Something went wrong. Try again.");
     } finally {
