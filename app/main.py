@@ -2,17 +2,24 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import communities
 from app.routers import communities, access, requests, pitches, waitlist
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
+from app.limiter import limiter
 import os
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
 app = FastAPI(title="Questin API", version="0.1.0")
 
 if os.getenv("ENVIRONMENT") == "production":
     origins = [
-        "https://your-vercel-url.vercel.app",  # update after Vercel deploy
+        "questin-backend.vercel.app"
     ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://localhost:3000"],
+    allow_origins=["http://localhost:5173", "http://localhost:3000","https://questin-alpha.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
