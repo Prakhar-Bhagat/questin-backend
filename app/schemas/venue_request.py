@@ -1,6 +1,6 @@
-from pydantic import BaseModel
 from datetime import datetime
-
+from pydantic import BaseModel, field_validator
+    
 class VenueRequestIn(BaseModel):
     community_id: int
     poc: str           # maps to requestForm.poc
@@ -9,6 +9,16 @@ class VenueRequestIn(BaseModel):
     capacity: str
     revenue: str       # maps to requestForm.revenue
     notes: str | None = None
+
+    @field_validator("phone")
+    @classmethod
+    def validate_phone(cls, v):
+        digits = ''.join(filter(str.isdigit, v))
+
+        if len(digits) != 10:
+            raise ValueError("Phone number must be 10 digits")
+
+        return digits
 
 class VenueRequestOut(BaseModel):
     id: int
