@@ -7,6 +7,15 @@ from app.auth import require_admin, require_catalogue_access
 
 router = APIRouter()
 
+@router.patch("/{request_id}/status", response_model=VenueRequestOut, dependencies=[Depends(require_admin)])
+async def update_venue_request_status(
+    request_id: int,
+    status: str,
+    db: AsyncSession = Depends(get_db)
+):
+    # Pass it to your service layer
+    return await svc.update_venue_status(request_id, status, db)
+
 @router.post("/", response_model=VenueRequestOut, status_code=201)
 async def submit_venue_request(
     data: VenueRequestIn,
