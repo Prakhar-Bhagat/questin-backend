@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const API = "http://localhost:8000";
+const API = import.meta.env.VITE_API_URL;
 const categories = ["All","Creative","Sports","Social","Learning","Cultural","Wellness"];
 
 export default function Questin() {

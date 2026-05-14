@@ -2,8 +2,13 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import communities
 from app.routers import communities, access, requests, pitches, waitlist
-
+import os
 app = FastAPI(title="Questin API", version="0.1.0")
+
+if os.getenv("ENVIRONMENT") == "production":
+    origins = [
+        "https://your-vercel-url.vercel.app",  # update after Vercel deploy
+    ]
 
 app.add_middleware(
     CORSMiddleware,
