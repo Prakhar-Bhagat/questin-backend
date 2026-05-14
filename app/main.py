@@ -7,10 +7,12 @@ from slowapi.errors import RateLimitExceeded
 from app.limiter import limiter
 import os
 
+app = FastAPI(title="Questin API", version="0.1.0")
+
+
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-app = FastAPI(title="Questin API", version="0.1.0")
 
 if os.getenv("ENVIRONMENT") == "production":
     origins = [
