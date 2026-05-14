@@ -14,10 +14,10 @@ app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 
-if os.getenv("ENVIRONMENT") == "production":
-    origins = [
-        "questin-backend.vercel.app"
-    ]
+origins = [
+    "http://localhost:5173", # Keep your local dev environment working
+    "https://questin-alpha.vercel.app", # <-- ADD THIS LINE
+]
 
 app.add_middleware(
     CORSMiddleware,
