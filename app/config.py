@@ -10,7 +10,7 @@ class Settings(BaseSettings):
     RESEND_API_KEY: str
     NOTIFY_EMAIL: str
     FROM_EMAIL: str
-    FRONTEND_URL: str = "http://localhost:3000"
+    FRONTEND_URL: str = "https://questin-alpha.vercel.app"
       # 7 days
     class Config:
         env_file = ".env"
