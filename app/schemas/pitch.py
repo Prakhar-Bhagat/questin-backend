@@ -7,6 +7,10 @@ class PitchIn(BaseModel):
     email: EmailStr
     description: str
     category: str
+    group_size: str | None = None
+    price_range: str | None = None
+    duration: str | None = None
+    frequency: str | None = None
 
 class PitchOut(BaseModel):
     id: int
