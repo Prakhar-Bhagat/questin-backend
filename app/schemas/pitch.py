@@ -11,6 +11,7 @@ class PitchIn(BaseModel):
     price_range: str | None = None
     duration: str | None = None
     frequency: str | None = None
+    venue_needs: str | None = None
 
 class PitchOut(BaseModel):
     id: int

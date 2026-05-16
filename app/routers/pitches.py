@@ -57,7 +57,7 @@ async def update_pitch_status(
                 duration=record.duration or "1-2 hours",
                 frequency=record.frequency or "Monthly",
                 image_url="",
-                venue_needs=f"Space matching '{record.category.split(',')[0]}' context",
+                venue_needs=record.venue_needs or "Needs Venue",
                 is_active=True
             )
             db.add(new_community)
