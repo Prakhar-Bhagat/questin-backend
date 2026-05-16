@@ -78,37 +78,36 @@ async def notify_waitlist(email: str):
 
 # --- User-facing emails ---
 async def notify_venue_status_update(
-    to_email: str, 
-    poc_name: str, 
-    new_status: str, 
+    to_email: str,
+    poc_name: str,
+    new_status: str,
     community_name: str,
-    community_email: str | None = None  # 👈 New parameter added
+    community_contact_name: str | None = None,
+    community_contact_email: str | None = None,
+    community_contact_phone: str | None = None,
 ):
     subject_status = "Approved! 🎉" if new_status == "approved" else "Update"
-    
-    # 1. Conditionally build the contact info block
-    next_steps_html = ""
-    if new_status == "approved" and community_email:
-        next_steps_html = f"""
-        <div style="margin: 24px 0; padding: 16px; background-color: #f5f5f0; border-left: 4px solid #CDFF00;">
-            <p style="margin-top: 0;"><b>Next Steps:</b> You can now reach out directly to coordinate!</p>
-            <p style="margin-bottom: 0;"><b>Contact Email:</b> <a href="mailto:{community_email}" style="color: #3B5EFF;">{community_email}</a></p>
+
+    contact_block = ""
+    if new_status == "approved" and any([community_contact_name, community_contact_email, community_contact_phone]):
+        contact_block = f"""
+        <div style="margin-top:24px;padding:16px;background:#f9f9f9;border-radius:8px;border:1px solid #eee;">
+            <p style="font-weight:700;margin-bottom:8px;">Community contact details</p>
+            {"<p>"+community_contact_name+"</p>" if community_contact_name else ""}
+            {"<p><a href='mailto:"+community_contact_email+"'>"+community_contact_email+"</a></p>" if community_contact_email else ""}
+            {"<p>"+community_contact_phone+"</p>" if community_contact_phone else ""}
         </div>
+        <p style="margin-top:16px;color:#888;font-size:13px;">Reach out to them directly to coordinate dates and logistics.</p>
         """
 
-    # 2. Send the email
     await send_email(
         to=to_email,
-        subject=f"Questin — {subject_status} on your Venue Request",
+        subject=f"Questin — {subject_status} on your venue request for {community_name}",
         html=f"""
-        <div style="font-family: sans-serif; color: #1a1a1a;">
-            <h2>Hi {poc_name},</h2>
-            <p>Your venue request to host <b>{community_name}</b> has been marked as <b>{new_status}</b>.</p>
-            
-            {next_steps_html}
-            
-            <p>If you have any questions, just reply to this email!</p>
-        </div>
+        <h2>Hi {poc_name},</h2>
+        <p>Your venue request for <b>{community_name}</b> has been marked as <b>{new_status}</b>.</p>
+        {contact_block}
+        <p style="margin-top:24px;color:#888;font-size:13px;">Questions? Just reply to this email.</p>
         """
     )
 async def send_access_approved(to_email: str, name: str, token: str):
