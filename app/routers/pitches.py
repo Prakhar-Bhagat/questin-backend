@@ -55,9 +55,9 @@ async def update_pitch_status(
                 group_size=record.group_size or "Varies",
                 price_range=record.price_range or "Free",
                 duration=record.duration or "1-2 hours",
-                venue_needs="Needs Venue", 
                 frequency=record.frequency or "Monthly",
-                image_url="https://images.unsplash.com/...", # Keep a placeholder image for now
+                image_url="",
+                venue_needs=f"Space matching '{record.category.split(',')[0]}' context",
                 is_active=True
             )
             db.add(new_community)
