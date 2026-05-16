@@ -19,3 +19,4 @@ class Pitch(Base):
     price_range: Mapped[Optional[str]] = mapped_column(String(50))
     duration: Mapped[Optional[str]] = mapped_column(String(50))
     frequency: Mapped[Optional[str]] = mapped_column(String(50))
+    venue_needs = Mapped[Optional[str]] = mapped_column(String(50))
