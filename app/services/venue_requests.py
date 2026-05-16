@@ -47,6 +47,14 @@ async def update_venue_status(request_id: int, status: str, db: AsyncSession) ->
 
 
 async def create_venue_request(data: VenueRequestIn, email: str, db: AsyncSession) -> VenueRequest:
+    existing = await db.execute(
+        select(VenueRequest).where(
+            VenueRequest.community_id == data.community_id,
+            VenueRequest.email == email
+        )
+    )
+    if existing.scalar_one_or_none():
+        raise HTTPException(status_code=409, detail="You've already requested this community.")
     record = VenueRequest(
         community_id=data.community_id,
         email=email,
@@ -61,7 +69,6 @@ async def create_venue_request(data: VenueRequestIn, email: str, db: AsyncSessio
     db.add(record)
     await db.commit()
     await db.refresh(record)
-    
     await notify_venue_request(
         data.poc, data.phone, data.community_id,
         data.dates, data.capacity, data.revenue, data.notes

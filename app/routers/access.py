@@ -10,7 +10,7 @@ from sqlalchemy import func
 from app.models.waitlist import Waitlist
 from app.models.pitch import Pitch
 from app.models.venue_request import VenueRequest
-
+from app.services.email import send_login_link
 router = APIRouter()
 
 @router.post("/", response_model=AccessRequestOut, status_code=201)
@@ -59,3 +59,19 @@ async def get_stats(db: AsyncSession = Depends(get_db)):
             "total": await count(Waitlist),
         },
     }
+
+@router.post("/login")
+async def request_login(email: str = Query(...), db: AsyncSession = Depends(get_db)):
+    result = await db.execute(
+        select(AccessRequest).where(
+            AccessRequest.email == email,
+            AccessRequest.status == "approved"
+        )
+    )
+    record = result.scalar_one_or_none()
+    if not record:
+        # Don't reveal whether email exists or not
+        return {"message": "If that email is approved, a login link is on its way."}
+    token = create_access_token(record.email)
+    await send_login_link(record.email, record.name, token)
+    return {"message": "If that email is approved, a login link is on its way."}

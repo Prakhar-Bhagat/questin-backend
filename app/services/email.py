@@ -133,3 +133,16 @@ async def send_access_rejected(to_email: str, name: str):
         <p>If you think this was a mistake or want to reapply, just reply to this email.</p>
         """
     )
+
+async def send_login_link(to_email: str, name: str, token: str):
+    access_link = f"{settings.FRONTEND_URL}?token={token}"
+    await send_email(
+        to=to_email,
+        subject="Questin — your login link",
+        html=f"""
+        <h2>Hey {name},</h2>
+        <p>Here's your link to access the Questin catalogue:</p>
+        <p><a href="{access_link}" style="background:#CDFF00;color:#0A0A0A;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:700;display:inline-block;">Open catalogue →</a></p>
+        <p style="color:#888;font-size:12px;margin-top:24px;">Valid for 7 days. If you didn't request this, ignore it.</p>
+        """
+    )

@@ -11,6 +11,11 @@ from app.services.email import (
 )
 
 async def create_access_request(data: AccessRequestIn, db: AsyncSession) -> AccessRequest:
+    existing = await db.execute(
+        select(AccessRequest).where(AccessRequest.email == data.email)
+    )
+    if existing.scalar_one_or_none():
+        raise HTTPException(status_code=409, detail="An access request with this email already exists.")
     record = AccessRequest(
         name=data.name,
         email=data.email,
