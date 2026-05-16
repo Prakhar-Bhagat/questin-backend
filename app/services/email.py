@@ -77,20 +77,40 @@ async def notify_waitlist(email: str):
 
 
 # --- User-facing emails ---
-async def notify_venue_status_update(to_email: str, poc_name: str, new_status: str, community_id: int):
-    # Make the subject line a bit more friendly based on the status
+async def notify_venue_status_update(
+    to_email: str, 
+    poc_name: str, 
+    new_status: str, 
+    community_name: str,
+    community_email: str | None = None  # 👈 New parameter added
+):
     subject_status = "Approved! 🎉" if new_status == "approved" else "Update"
     
+    # 1. Conditionally build the contact info block
+    next_steps_html = ""
+    if new_status == "approved" and community_email:
+        next_steps_html = f"""
+        <div style="margin: 24px 0; padding: 16px; background-color: #f5f5f0; border-left: 4px solid #CDFF00;">
+            <p style="margin-top: 0;"><b>Next Steps:</b> You can now reach out directly to coordinate!</p>
+            <p style="margin-bottom: 0;"><b>Contact Email:</b> <a href="mailto:{community_email}" style="color: #3B5EFF;">{community_email}</a></p>
+        </div>
+        """
+
+    # 2. Send the email
     await send_email(
         to=to_email,
         subject=f"Questin — {subject_status} on your Venue Request",
         html=f"""
-        <h2>Hi {poc_name},</h2>
-        <p>Your venue request for Community #{community_id} has been marked as <b>{new_status}</b>.</p>
-        <p>If you have any questions or need further details, simply reply to this email.</p>
+        <div style="font-family: sans-serif; color: #1a1a1a;">
+            <h2>Hi {poc_name},</h2>
+            <p>Your venue request to host <b>{community_name}</b> has been marked as <b>{new_status}</b>.</p>
+            
+            {next_steps_html}
+            
+            <p>If you have any questions, just reply to this email!</p>
+        </div>
         """
     )
-
 async def send_access_approved(to_email: str, name: str, token: str):
     access_link = f"{settings.FRONTEND_URL}?token={token}"
     await send_email(
