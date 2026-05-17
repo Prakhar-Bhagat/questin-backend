@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db
 from app.schemas.venue_request import VenueRequestIn, VenueRequestOut
 from app.services import venue_requests as svc
-from app.auth import require_admin, require_catalogue_access
+from app.auth import require_approved_venue, require_admin
 
 router = APIRouter()
 
@@ -11,7 +11,7 @@ router = APIRouter()
 async def submit_venue_request(
     data: VenueRequestIn,
     db: AsyncSession = Depends(get_db),
-    email: str = Depends(require_catalogue_access)
+    email: str = Depends(require_approved_venue)
 ):
     return await svc.create_venue_request(data, email, db)
 

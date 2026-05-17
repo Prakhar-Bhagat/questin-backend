@@ -4,15 +4,15 @@ from sqlalchemy import select
 from app.database import get_db
 from app.models.community import Community
 from app.schemas.community import CommunityOut
-from app.auth import require_catalogue_access
-
+from app.auth import require_approved_venue
+from app.models.users import User
 router = APIRouter()
 
 @router.get("/", response_model=list[CommunityOut])
 async def get_communities(
     category: str | None = Query(None),
     db: AsyncSession = Depends(get_db),
-    email: str = Depends(require_catalogue_access)   # <-- protected
+    current_user: User = Depends(require_approved_venue),   # <-- protected
 ):
     query = select(Community).where(Community.is_active == True)
     if category:
