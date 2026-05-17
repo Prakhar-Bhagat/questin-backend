@@ -146,3 +146,22 @@ async def send_login_link(to_email: str, name: str, token: str):
         <p style="color:#888;font-size:12px;margin-top:24px;">Valid for 7 days. If you didn't request this, ignore it.</p>
         """
     )
+
+async def send_verification_email(to_email: str, name: str, token: str) -> None:
+    verify_url = f"{settings.FRONTEND_URL}/verify?token={token}"
+    try:
+        resend.Emails.send({
+            "from": settings.FROM_EMAIL,
+            "to": to_email,
+            "subject": "Verify your Questin account",
+            "html": f"""
+                <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px 24px;background:#0A0A0A;color:#F5F5F0">
+                    <h2 style="font-size:22px;font-weight:900;color:#CDFF00;margin-bottom:8px">QUES↗IN</h2>
+                    <p style="font-size:15px;margin-bottom:24px">Hey {name or 'there'}, confirm your email to finish creating your account.</p>
+                    <a href="{verify_url}" style="display:inline-block;padding:12px 24px;background:#CDFF00;color:#0A0A0A;font-weight:700;border-radius:8px;text-decoration:none;font-size:14px">Verify my email →</a>
+                    <p style="font-size:12px;color:#5A5A5A;margin-top:24px">Link expires in 24 hours. If you didn't sign up, ignore this.</p>
+                </div>
+            """
+        })
+    except Exception as e:
+        print(f"Verification email failed: {e}")

@@ -12,5 +12,7 @@ class User(Base):
     hashed_password: Mapped[str] = mapped_column(String(200))
     name: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)
     role: Mapped[str] = mapped_column(String(20), default="venue")
+    is_verified: Mapped[bool] = mapped_column(Boolean, default=False)
+    verify_token: Mapped[Optional[str]] = mapped_column(String(200), nullable=True)
     is_approved: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())

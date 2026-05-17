@@ -66,6 +66,11 @@ async def get_current_user(
 async def require_approved_venue(
     current_user: User = Depends(get_current_user),
 ) -> User:
+    if not current_user.is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Please verify your email first",
+        )
     if not current_user.is_approved:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
