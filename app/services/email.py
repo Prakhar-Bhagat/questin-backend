@@ -15,7 +15,7 @@ async def send_email(to: str, subject: str, html: str):
             partial(resend.Emails.send, {
                 "from": settings.FROM_EMAIL,
                 "to": recipient,
-                "subject": f"[DEV → {to}] {subject}",
+                "subject": f"{subject}",
                 "html": html,
             })
         )

@@ -58,7 +58,10 @@ async def update_pitch_status(
                 frequency=record.frequency or "Monthly",
                 image_url="",
                 venue_needs=record.venue_needs or "Needs Venue",
-                is_active=True
+                is_active=True,
+                contact_name=record.organizer_name,
+                contact_email=record.email,
+                contact_phone=None,
             )
             db.add(new_community)
 
