@@ -11,9 +11,9 @@ router = APIRouter()
 async def submit_venue_request(
     data: VenueRequestIn,
     db: AsyncSession = Depends(get_db),
-    email: str = Depends(require_approved_venue)
+    current_user: User = Depends(require_approved_venue)
 ):
-    return await svc.create_venue_request(data, email, db)
+    return await svc.create_venue_request(data, current_user.email, db)
 
 @router.get("/", response_model=list[VenueRequestOut], dependencies=[Depends(require_admin)])
 async def list_venue_requests(db: AsyncSession = Depends(get_db)):
