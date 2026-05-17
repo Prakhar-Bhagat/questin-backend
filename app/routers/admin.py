@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from pydantic import BaseModel
-from typing import List
+from typing import List, Optional
 from datetime import datetime
 
 from app.database import get_db
@@ -12,11 +12,10 @@ from app.auth import require_admin
 router = APIRouter()
 
 
-# ---------- schemas ----------
-
 class UserOut(BaseModel):
     id: int
     email: str
+    name: Optional[str] = None
     role: str
     is_approved: bool
     created_at: datetime
@@ -27,8 +26,6 @@ class UserOut(BaseModel):
 class ApproveRequest(BaseModel):
     is_approved: bool
 
-
-# ---------- endpoints ----------
 
 @router.get("/users", response_model=List[UserOut], dependencies=[Depends(require_admin)])
 async def list_users(db: AsyncSession = Depends(get_db)):
@@ -46,7 +43,6 @@ async def update_user_approval(
     user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-
     user.is_approved = body.is_approved
     await db.commit()
     await db.refresh(user)
