@@ -4,6 +4,7 @@ from app.database import get_db
 from app.schemas.venue_request import VenueRequestIn, VenueRequestOut
 from app.services import venue_requests as svc
 from app.auth import require_approved_venue, require_admin
+from app.models.users import User
 
 router = APIRouter()
 
