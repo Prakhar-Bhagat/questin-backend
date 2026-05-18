@@ -32,5 +32,5 @@ class VenueRequestOut(BaseModel):
     notes: str | None
     status: str
     created_at: datetime
-
+    community_name: str | None = None
     model_config = {"from_attributes": True}

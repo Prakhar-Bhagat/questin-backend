@@ -76,6 +76,20 @@ async def create_venue_request(data: VenueRequestIn, email: str, db: AsyncSessio
     return record
 
 
-async def list_venue_requests(db: AsyncSession) -> list[VenueRequest]:
-    result = await db.execute(select(VenueRequest).order_by(VenueRequest.created_at.desc()))
-    return result.scalars().all()
+async def list_venue_requests(db: AsyncSession):
+    result = await db.execute(
+        select(VenueRequest, Community)
+        .join(Community, Community.id == VenueRequest.community_id)
+        .order_by(VenueRequest.created_at.desc())
+    )
+
+    rows = result.all()
+
+    output = []
+
+    for req, community in rows:
+        item = req.__dict__.copy()
+        item["community_name"] = community.name
+        output.append(item)
+
+    return output
